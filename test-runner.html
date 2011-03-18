@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Quoridor Unit Tests</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js"></script>
+<script type="text/javascript" src="/lib/beta/js/utils.js"></script>
+<script type="text/javascript" src="/static/src/js/timer.js"></script>
+<script type="text/javascript" src="/static/src/js/unit.js"></script>
+<script type="text/javascript" src="pawnpwn.js"></script>
+<script type="text/javascript" src="/test/test-pawnpwn.js"></script>
+<script type="text/javascript" src="pawnpwnUI.js"></script>
+<script type="text/javascript" src="/test/test-pawnpwnUI.js"></script>
+<script type="text/javascript" src="move-controller.js"></script>
+<script type="text/javascript" src="/test/test-move-controller.js"></script>
+<script type="text/javascript" src="graph.js"></script>
+<script type="text/javascript" src="/test/test-graph.js"></script>
+</head>
+
+<body onload="runner.run();">
+<h1 id="title"><script>document.write(document.title);</script></h1>
+
+<script>
+var pawnpwnTest = namespace.lookup('com.pageforest.pawnpwn.test');
+var pawnpwnUITest = namespace.lookup('com.pageforest.pawnpwnUI.test');
+var moveControllerTest = namespace.lookup('com.pageforest.move-controller.test');
+var graphTest = namespace.lookup('com.pageforest.graph.test');
+var unit = namespace.lookup('org.startpad.unit');
+var runner = namespace.lookup('com.pageforest.pawnpwn.test.runner');
+runner.define(function (ns) {
+    function run() {
+        unit.runTest(graphTest);
+        unit.runTest(pawnpwnTest);
+        unit.runTest(pawnpwnUITest);
+        unit.runTest(moveControllerTest);
+    };
+    ns.run = run;
+});
+</script>
+
+<div id="divUnit" style="font-family: Courier;"></div>
+
+</body>
+</html>
