@@ -1,0 +1,38 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<title>About Pawn Pwn</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/beta/js/json2.min.js"></script>
+<script type="text/javascript" src="/lib/beta/js/utils.js"></script>
+<script src='/about.js'></script>
+<script type="text/javascript">
+    var pawnpwnUI = namespace.lookup("com.pageforest.aboutpawnpwn");
+    $(document).ready(pawnpwnUI.onReady);
+</script>
+<style>
+	body { background-color: #EEE; width: 95%; margin: auto; font-size: 20px; }
+	body.wide { width: 700px; }
+	a:link { color: #333; }
+	a:hover { color: #555; }
+</style>
+</head>
+
+
+<body>
+<h3>Welcome to the Pawn Pwn about page!</h3>
+<p>
+The goal of Pawn Pwn is to get your pawn to your opponent's home row.  On your turn you can move your pawn or place a wall.  
+Use walls to make your opponent's path longer, however you may not completely prevent them from reaching a goal square.  
+When you are adjacent to your opponent, you can move to any square they can move to.
+</p>
+<p>
+To start a new game with a with an friend over the web, make sure you are signed in to Pageforest, and make your first move.  
+Pageforest will automatically save your game and adjust the url in your address bar.
+</p>
+<p id=linkp>
+</p>
+<h4 id=linkh></h4>
+</body>
+</html>

@@ -1,7 +1,8 @@
 body
 {
+  position: relative;
   background-color: #444;
-  margin: 0px;
+  margin: 0;
   overflow: hidden;
   user-select: none; 
   -o-user-select: none; 
@@ -9,32 +10,54 @@ body
   -khtml-user-select: none; 
   -webkit-user-select: none; 
 }
+body.noAppBar #pfAppBar { display: none; }
+
 body.fail { background-color: white; font-size: 18px; }
 
+body.four .movelist { display: none; }
+body.three .movelist { display: none; }
+body.three .graph { display: none; }
+body.one .movelist { display: none; }
 
-.wall, .pawn { position: absolute; z-index: 1002; }
-.grabbing { z-index: 1003; }
-#pfAppPanel{ z-index: 9; }
 
-div.board
+div.gradientv { position: absolute; z-index: 5; background-image: url('images/gradientv.png'); width: 10px; }
+div.gradienth { position: absolute; z-index: 5; background-image: url('images/gradienth.png'); height: 10px; }
+body.one .gradienth { display: none; }
+body.two .gradienth { display: none; }
+body.three .gradienth { display: none; } 
+body.three .gradientv { display: none; }
+body.four .gradientv { display: none; }
+
+.gradientCorner { position: absolute; z-index: 6; background-image: url('images/gradientcorner.png'); height: 10px; width: 10px; display: none; }
+body.five .gradientCorner { display: block; }
+
+
+div.board { position: absolute; overflow: hidden; }
+div.board div { position: absolute; z-index: 1; }
+
+
+
+
+div.graph { position: absolute; }
+div.graph canvas { margin: 5px; }
+
+div.movelist { position: absolute; }
+div.tableDiv
 {
-  position: absolute;
-  width: 748px;
-  height: 748px;
-  z-index: 1000;
-}
-div.board img.board { position: absolute; z-index: 1; }
-div.info { position: absolute; overflow: hidden; }
-h1
-{
-  margin: 0;
-  color: #DDD;
-  font-weight: bold;
-  text-align: center;
+  margin: 5px;
+  position: relative;
+  overflow: hidden;
+  background-color: #666;
+  width: 100%;
 }
 
-body.mini-landscape #pfAppBar { display: none; }
-body.mini-portrait #pfAppBar { display: none; }
+div.title { position: absolute; }
+
+.wall, .pawn { position: absolute; z-index: 3; }
+.grabbing { z-index: 4; }
+
+
+
 
 #title { width: 100%; height: 100%; }
 body.landscape #title { font-size: 12px; height: 10%; }
@@ -42,23 +65,49 @@ body.mini-landscape #title { font-size: 20px; text-align: left; line-height: 35p
 body.portrait #title { position: absolute; line-height: 40px; }
 
 
-#buttons { position: relative; width: 100%; height: 10%; }
-
-body.landscape #buttons {  }
-body.mini-landscape #buttons { display: none; position: absolute; }
-body.portrait #buttons { position: absolute; height: 100%; }
-body.mini-portrait #buttons { margin: 2px, 0; }
-
-.button { position: absolute; width: 30px; height: 30px; }
+.divButtons { position: absolute; height: 20px; width: 55px; }
+.button { height: 20px; width: 20px; float: left; }
+#moveNum { float: left; height: 20px; width: 15px; text-align: center; margin: 0; line-height: 20px;
+	font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: white; font-weight: bold; }
 
 
-body.landscape #tableDiv
-{
-  position: relative;
-  overflow: hidden;
-  background-color: #3B723B;
-  width: 100%;
-}
+body.one.noAppBar {}
+
+
+
+#text { height: 30px; width: 66px; overflow: hidden; float: left; }
+h1 { margin: 0; color: #DDD; font-size: 16px; font-weight: bold; text-align: left; line-height: 30px; }
+.title .about { margin: 5px; }
+.title .sign-in { margin: 5px 5px 5px 0; float: right; }
+
+
+
+
+
+
+/*
+
+
+#pfAppPanel{ z-index: 9; }
+
+
+div.board img.board { position: absolute; z-index: 1; }
+
+body.landscape:not(.mini-landscape) .gradient { display: block; }
+body.landscape.mini-landscape .gradient { display: none; }
+body.portrait .gradient { display: none; }
+
+
+div.info { position: absolute; overflow: hidden; }
+
+h1:hover { cursor: pointer; }
+
+body.mini-landscape #pfAppBar { display: none; }
+body.mini-portrait #pfAppBar { display: none; }
+
+
+
+
 body.landscape:not(.mini-landscape) #tableDiv { height: 40% }
 body.landscape.mini-landscape #tableDiv { position: absolute; height: 80%; }
 body.portrait #tableDiv { display: none; }
@@ -68,6 +117,7 @@ body.portrait #scroller { display: none; }
 body.landscape #divGraph { width: 100%; height: 40%; }
 body.mini-landscape #divGraph { display: none; }
 body.portrait #divGraph { display: none; }
+*/
 
 
 .historyTable { margin-left: 5px; margin-right: 5px; color: #252525; }
@@ -78,7 +128,7 @@ body.portrait #divGraph { display: none; }
 .historyTable td { text-align: center; }
 .historyTable th[scope="past"] { color: #616161; text-align: right; }
 .historyTable td[scope="past"] { color: #616161; text-align: center; }
-
+/*
 div.hidden-div { position: absolute; overflow: hidden; }
 
 #signIn { position: absolute; width: 79px; height: 30px; }
@@ -86,4 +136,4 @@ body.landscape.mini-landscape #signIn { display: visible; }
 body.landscape:not(.mini-landscape) #signIn { display: none; }
 body.portrait.mini-portrait #signIn { display: visible; margin: 2px, 0; }
 body.portrait:not(.mini-portrait) #signIn { display: none; }
-
+*/

@@ -23,8 +23,8 @@ namespace.lookup('com.pageforest.move-controller').defineOnce(function (ns) {
             var n, shortestList;
             var longestPrefix = 0;
             shortestList = Math.min(this.history.list.length, newHistory.list.length);
-            if (qg.history.pos < shortestList) {
-                shortestList = qg.history.pos;
+            if (this.history.pos < shortestList) {
+                shortestList = this.history.pos;
             }
             for (n = 0; n < shortestList; n++) {
                 if (base.isEqual(this.history.list[n], newHistory.list[n])) {
