@@ -166,7 +166,7 @@ namespace.lookup('com.pageforest.pawnpwn').defineOnce(function (ns) {
                     }
                 }
             } else {
-                throw new Error("no 'from' var in qg.move call");
+                throw new Error("no 'from' var in pp.move call");
             }
 
             var action = decode(str);

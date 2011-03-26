@@ -3,20 +3,21 @@
   "cloneable": false,
   "created": {
     "__class__": "Date",
-    "isoformat": "2010-10-28T21:56:22.273720Z"
+    "isoformat": "2011-03-18T21:15:40.414260Z"
   },
   "icon": "images/icon.png",
   "modified": {
     "__class__": "Date",
-    "isoformat": "2011-01-05T00:22:11.129810Z"
+    "isoformat": "2011-03-22T23:11:47.417317Z"
   },
   "owner": "bobbys",
   "readers": [
     "public"
   ],
   "referers": [],
-  "sha1": "ce624462eee95fa1eb48c9ff3f945585686767bb",
-  "size": 307,
+  "secureData": false,
+  "sha1": "407b9c0f61da619aba0f2cf228088bf03682bc15",
+  "size": 319,
   "tags": [
     "game",
     "sample"

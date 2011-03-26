@@ -198,7 +198,8 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
      // somehow this line fixes an iscroll-mini-pawnpwn-board-generation bug
      // Theory: the tableDiv should be display: none.  The bug means that it is visible.  
      // So, by checking to make sure it is display: none, the program wants to cover its own back and say, 
-     // "Yup we sure are display none, we were display none the entire time!  It's so silly that you even ask what our display property is, we are totally display: none. LOL!"
+     // "Yup we sure are display none, we were display none the entire time!  
+     // It's so silly that you even ask what our display property is, we are totally display: none. LOL!"
         $(parts.tableDiv).css('display');
     }
 
@@ -246,16 +247,16 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         for (x = 0; x < 2; x++) {    
             for (y = 0; y < 10; y++) {
                 wall = 'w' + x + '_' + y;
-                for (i = 0; i < qg.history.pos; i++) {
-                    if (qg.history.list[i].from == wall) {
+                for (i = 0; i < pp.history.pos; i++) {
+                    if (pp.history.list[i].from == wall) {
                         used = i;
                         break;
                     }
                 }
                 if (used !== false) {
                     grabbing.wallHome = wall;
-                    placeWall(qg.history.list[used].move, false);
-                    if (qg.history.list[used].move[0] == 'v') {
+                    placeWall(pp.history.list[used].move, false);
+                    if (pp.history.list[used].move[0] == 'v') {
                         dom.setSize(parts[wall], [wallPicWidth, wallPicLength]);
                     } else {
                         dom.setSize(parts[wall], [wallPicLength, wallPicWidth]);
@@ -267,7 +268,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
                 dom.setSize(parts[wall], [wallPicWidth, wallPicLength]);
             }
             dom.setSize(parts['p' + x], [pawnSize, pawnSize]);
-            pawnLoc = pawnpwn.encode({i: qg.players[x].i, j: qg.players[x].j, wall: false});
+            pawnLoc = pawnpwn.encode({i: pp.players[x].i, j: pp.players[x].j, wall: false});
             grabbing.pColor = x;
             placePawn(pawnLoc, false);
         }
@@ -373,7 +374,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         for (x = 0; x < walls.length; x++) {
             if (score[x] > highScore &&
                 score[x] > scoreThresh &&
-                qg.isValidMove(pawnpwn.encode(walls[x]))) {
+                pp.isValidMove(pawnpwn.encode(walls[x]))) {
                 xBest = x;
                 highScore = score[x];
             }
@@ -390,7 +391,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             return false;
         }
         var move = pawnpwn.encode({i: pt.i, j: pt.j, wall: false});
-        if (qg.isValidMove(move)) {
+        if (pp.isValidMove(move)) {
             return move;
         }
         return false;
@@ -400,9 +401,9 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
     function ptWallHome(pos) {
         pos = vector.sub(pos, posBoard);
         var n, player;
-        if (qg.currentPlayer() === 0 && vector.ptInRect(pos, wallStash[0])) {
+        if (pp.currentPlayer() === 0 && vector.ptInRect(pos, wallStash[0])) {
             player = 0;
-        } else if (qg.currentPlayer() === 1 && vector.ptInRect(pos, wallStash[1])) {
+        } else if (pp.currentPlayer() === 1 && vector.ptInRect(pos, wallStash[1])) {
             player = 1;
         } else {
             return false;
@@ -410,8 +411,8 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var xStart = posTiles[0] - wallWidth - pawnCenter[0];
         var wall = Math.floor((pos[0] - xStart) / tileSpacing[0]);
         var str = 'w' + player + '_' + wall;
-        for (n = 0; n < qg.history.pos; n++) {
-            if (qg.history.list[n].from == str || wall < 0 || wall > 9) {
+        for (n = 0; n < pp.history.pos; n++) {
+            if (pp.history.list[n].from == str || wall < 0 || wall > 9) {
                 return false;
             }
         }
@@ -482,8 +483,8 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var loc = ptTile(e.x - posTiles[0], e.y - posTiles[1]);
         var k;
         for (k = 0; k < 2; k++) {
-            if (loc.k === 0 && loc.i == qg.players[k].i &&
-                loc.j == qg.players[k].j) {
+            if (loc.k === 0 && loc.i == pp.players[k].i &&
+                loc.j == pp.players[k].j) {
                 hovering = "p" + k;
                 return;
             }
@@ -503,8 +504,8 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         }
         var n;
         var trackAngle;
-        for (n = 0; n < qg.track.length; n++) {
-            trackAngle = Math.atan2(-qg.track[n][1], qg.track[n][0]) - Math.PI / 2;
+        for (n = 0; n < pp.track.length; n++) {
+            trackAngle = Math.atan2(-pp.track[n][1], pp.track[n][0]) - Math.PI / 2;
             if (trackAngle >= 0) {
                 trackAngle -= Math.PI * 2;
             }
@@ -517,7 +518,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
                 index = n;
             }
         }
-        return vector.copy(qg.track[index]);
+        return vector.copy(pp.track[index]);
     }
 
     // Return the move vector for a pawn given the relative mouse coordinates.
@@ -619,7 +620,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         // Pawn grabbing
         else {
             vector.subFrom(posMouse, grabbing.offset);
-            var p = qg.players[qg.currentPlayer()];
+            var p = pp.players[pp.currentPlayer()];
             var pawn = posPawn(p.i, p.j);
             var difference = vector.sub(posMouse, pawn);
             var k = mouseToPawn(difference[0], difference[1]);
@@ -637,7 +638,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         if (freezeUI === true) {
             return false;
         }
-        var p = qg.players[qg.currentPlayer()];
+        var p = pp.players[pp.currentPlayer()];
         pos = posPawn(p.i, p.j);
         var d = Math.sqrt(vector.distance2(posMouse, pos));
         if (d < 1.5 * tileWidth) {
@@ -664,7 +665,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         }
         var posMouse = [event.pageX, event.pageY];
         if (pawnNear(posMouse)) {
-            hovering = "p" + qg.currentPlayer();
+            hovering = "p" + pp.currentPlayer();
         } else {
             hovering = ptWallHome(posMouse);
         }
@@ -683,9 +684,9 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             $('#' + grabbing.wallHome).addClass('grabbing');
             return;
         }
-        if (hovering[0] === "p" && parseInt(hovering[1], 10) === qg.currentPlayer()) {
+        if (hovering[0] === "p" && parseInt(hovering[1], 10) === pp.currentPlayer()) {
             mousePos = vector.sub([event.pageX, event.pageY], grabbing.offset);
-            var player = qg.players[qg.currentPlayer()];
+            var player = pp.players[pp.currentPlayer()];
             grabbing.pos = posPawn(player.i, player.j);
             grabbing.valid = true;
             grabbing.pColor = parseInt(hovering[1], 10);
@@ -694,14 +695,14 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         }
     }
 
-    // currently broken with qg.history changed to {pos: n, list: [{},{},{}]} format, takes history and creates a table out of it
+    // currently broken with pp.history changed to {pos: n, list: [{},{},{}]} format, takes history and creates a table out of it
     function setHistory() {
-        if (qg.historyCurrent()) {
+        if (pp.historyCurrent()) {
             parts.fwd.disabled = true;
         } else {
             parts.fwd.disabled = false;
         }
-        if (qg.history.pos > 0) {
+        if (pp.history.pos > 0) {
             parts.back.disabled = false;
         } else {
             parts.back.disabled = true;
@@ -711,9 +712,9 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var move, past;
         var st = '<tr><th scope="col">Move</th><th scope="col">White</th><th scope="col">Black</th></tr>';
         var i;
-        for (i = 0; i < qg.history.list.length; i++) {
-            move = qg.history.list[i].move;
-            if (i < qg.history.pos) {
+        for (i = 0; i < pp.history.list.length; i++) {
+            move = pp.history.list[i].move;
+            if (i < pp.history.pos) {
                 if (i % 2 === 0) {
                     st += '<tr><th scope="row">' + (i / 2 + 1) + '.</th><td>' + move + '</td>';
                 } else {
@@ -733,11 +734,11 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         // set the graph
         var i, j;
         var lines = [[[0, 8]], [[0, 8]]];
-        var pos = qg.history.pos;
-        var list = qg.history.list;
+        var pos = pp.history.pos;
+        var list = pp.history.list;
         // Set the scale regardless of where in history
         for (i = 0; i < 2; i++) {
-            for (j = 0; j < qg.history.list.length; j++) {
+            for (j = 0; j < pp.history.list.length; j++) {
                 lines[i][j + 1] = [j + 1, list[j].score[i]];
             }
         }
@@ -751,7 +752,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             }
         }
         historyGraph.draw(lines);
-        if (qg.historyCurrent()) {
+        if (pp.historyCurrent()) {
             return;
         }
         // Draw the skinny lines for future moves
@@ -785,7 +786,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             $('#' + grabbing.wallHome).removeClass('grabbing');
             if (grabbing.wall && wallSpeed < wallSpeedLimit) {
                 placeWall(grabbing.wall, true);
-                qg.move(grabbing.wall, grabbing.wallHome, false);
+                pp.move(grabbing.wall, grabbing.wallHome, false);
                 moveMade = true;
             } else {
                 if (grabbing.orient == "h") {
@@ -802,17 +803,17 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         if (grabbing.pColor !== false) {
             $('#p' + grabbing.pColor).removeClass('grabbing');
             if (grabbing.pMove) {
-                var player = qg.players[grabbing.pColor];
+                var player = pp.players[grabbing.pColor];
                 var from = pawnpwn.encode({i: player.i, j: player.j, wall: false});
-                qg.move(grabbing.pMove, from, false);
+                pp.move(grabbing.pMove, from, false);
                 placePawn(grabbing.pMove, true);
                 moveMade = true;
             } else {
-                placePawn(pawnpwn.encode({i: qg.players[grabbing.pColor].i,
-                    j: qg.players[grabbing.pColor].j, wall: false}), true);
+                placePawn(pawnpwn.encode({i: pp.players[grabbing.pColor].i,
+                    j: pp.players[grabbing.pColor].j, wall: false}), true);
             }
-            var score = qg.getScore();
-            freezeUI = qg.isGameOver();
+            var score = pp.getScore();
+            freezeUI = pp.isGameOver();
             if (score[0] === 0) {
                 alert("White wins!");
             } else if (score[1] === 0) {
@@ -884,13 +885,20 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         }
         myScroll = new iScroll('scroller');
         handleAppCache();
-        qg = new pawnpwn.PawnPwnGame();
-        qg.init();
-        mc = new moveController.MoveController(ns, qg.history);
+        pp = new pawnpwn.PawnPwnGame();
+        pp.init();
+        mc = new moveController.MoveController(ns, pp.history);
         init();
         
         historyGraph = new graph.GraphLines(parts.historyGraph);
         //add event handlers
+        $('h1').bind('click', function() {
+            var str = 'http://pawnpwn.pageforest.com/about.html/';
+            if (location.hash) {
+                str += location.hash;
+            }
+            window.open(str);
+        });
         $("#divBoard").bind('mousemove touchmove', onMouseMove);
         $(document).bind('mouseup touchend touchcancel', onMouseUp);
         $("#divBoard").bind('mousedown touchstart', onMouseDown);
@@ -916,7 +924,6 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         
         
         $('.sign-in').click(controlSignIn);
-        $("#signIn").bind('click', ns.client.signInOut);
         onUserChange(ns.client.username);
         
         ns.client.poll();
@@ -933,28 +940,25 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         $('body').css('background-color', backgroundcolor);
         $('h1').css('color', wallcolor);
         $('#tableDiv').css('background-color', tilecolor);
-        
-        
-        
     }
 
     function buttonControl(dir) {
-        if (freezeUI && !qg.isGameOver()) {
+        if (freezeUI && !pp.isGameOver()) {
             console.log(dir + " button clicked, but UI is frozen");
             return;
         }
-        if (dir == 'back' && qg.history.pos === 0 ||
-            dir == 'fwd' && qg.historyCurrent()) {
+        if (dir == 'back' && pp.history.pos === 0 ||
+            dir == 'fwd' && pp.historyCurrent()) {
             console.log(dir + " button clicked, but history is at limit");
             return;
         }
-        console.log("going " + dir + " from " + qg.history.pos);
+        console.log("going " + dir + " from " + pp.history.pos);
         var newPos;
         if (dir == 'back') {
-            newPos = qg.history.pos - 1;
+            newPos = pp.history.pos - 1;
         }
         if (dir == 'fwd') {
-            newPos = qg.history.pos + 1;
+            newPos = pp.history.pos + 1;
         }
         freezeUI = true;
         setMovePos(newPos, true, function() {
@@ -985,7 +989,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         }
         setHistory();
         var n, moveIndex, turn, str, wall, home, loc, player;
-        if (pos == qg.history.pos) {
+        if (pos == pp.history.pos) {
             if (fnComplete == undefined) {
                 throw new Error("setMovePos called without an fnComplete function");
                 return;
@@ -995,9 +999,9 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             return;
         }
         var action, move;
-        if (pos < qg.history.pos) {
-            qg.changeHistoryPos(qg.history.pos - 1);
-            action = qg.history.list[qg.history.pos];
+        if (pos < pp.history.pos) {
+            pp.changeHistoryPos(pp.history.pos - 1);
+            action = pp.history.list[pp.history.pos];
             if (action.move.length === 4) {
                 grabbing.wallHome = action.from;
                 home = wallHome[grabbing.wallHome];
@@ -1012,21 +1016,21 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
                 }
             }
             if (action.move.length === 2) {
-                player = qg.players[qg.history.pos % 2];
+                player = pp.players[pp.history.pos % 2];
                 loc = vector.add(posTiles, vector.mult([player.i, player.j], tileSpacing));
                 if (animate) {
-                    $(parts['p' + (qg.history.pos % 2)]).animate({left: loc[0], top: loc[1]},
+                    $(parts['p' + (pp.history.pos % 2)]).animate({left: loc[0], top: loc[1]},
                         animateSpeed, setMovePos.fnArgs(pos, animate, fnComplete));
                 } else {
-                    dom.setPos(parts['p' + (qg.history.pos % 2)], loc);
+                    dom.setPos(parts['p' + (pp.history.pos % 2)], loc);
                     setMovePos(pos, animate, fnComplete);
                     return;
                 }
             }
         } else {  // go forward in history
-            action = qg.history.list[qg.history.pos];
+            action = pp.history.list[pp.history.pos];
             move = pawnpwn.decode(action.move);
-            qg.changeHistoryPos(qg.history.pos + 1);
+            pp.changeHistoryPos(pp.history.pos + 1);
             if (move.wall) {
                 grabbing.wallHome = action.from;
                 // home = wallHome[grabbing.wallHome];
@@ -1048,8 +1052,8 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
                 }
             }
             if (move.wall === false) {
-                var p = (qg.history.pos - 1) % 2;
-                player = qg.players[p];
+                var p = (pp.history.pos - 1) % 2;
+                player = pp.players[p];
                 loc = vector.add(posTiles, vector.mult([player.i, player.j], tileSpacing));
                 if (animate) {
                     $(parts['p' + p]).animate({left: loc[0], top: loc[1]},
@@ -1065,7 +1069,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
 
     function controlSignIn() {
         if (ns.client.username == undefined) {
-            ns.client.signIn.fnMethod(ns.client);
+            ns.client.signIn(ns.client.username);
             return;
         }
         window.open('http://pageforest.com/docs/');
@@ -1080,7 +1084,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
     }
     
     function appendMoves(newHistory) {
-        qg.history.list = newHistory.list;
+        pp.history.list = newHistory.list;
     }
 
     function setDoc(json)
@@ -1105,7 +1109,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         return {
             readers: ['public'],
             writers: ['public'],
-            blob: {title: 'Pawn Pwn Game', version: 3, game: qg.getState()}
+            blob: {title: 'Pawn Pwn Game', version: 3, game: pp.getState()}
         };
     }
 

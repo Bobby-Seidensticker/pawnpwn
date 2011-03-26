@@ -1,0 +1,17 @@
+{
+  "name": "Pawn Pwn",
+  "description": "Get your pawn across the board before your opponent, use your walls to slow them down, but don't run out too soon!",
+  "version": "0.0.0.2",
+  "app": {
+    "urls": [
+      "http://pawnpwn.pageforest.com/"
+    ],
+    "launch": {
+      "web_url": "http://pawnpwn.pageforest.com/"
+    }
+  },
+  "icons": {
+    "128": "icon128.png"
+  },
+  "permissions": [ ]
+}
