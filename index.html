@@ -1,9 +1,10 @@
 <!DOCTYPE html> 
-<html manifest="/app.manifest">
+<html manifest="/app.manifestasdf">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="google-site-verification" content="ik_cRmLxtzhvgOMVCW98r1AfkpPKwDS6q-X00M6nL8c" />
 <title>Play Pawn Pwn Online</title>
 <link rel="stylesheet" type="text/css" href="pawnpwn.css"/>
 <link rel="icon" type="image/png" href="/images/icon.png" />
@@ -25,7 +26,36 @@ $(document).ready(pawnpwnUI.onReady);
 </head>
 
 <body>
+  <div class=board id=board>
+    <div class=divBoard id=divBoard></div>
+  </div>
+  <div class=gradientv id=gradientv></div>
+  <div class=gradienth id=gradienth></div>
+  <div class=gradientCorner id=gradientCorner></div>
+  <div class=graph id=graph>
+    <canvas class="historyGraph" id="historyGraph" width="200" height="200"></canvas>
+  </div>
+  <div class=movelist id=movelist>
+    <div class="tableDiv" id="tableDiv">
+      <div id="scroller">
+        <table class="historyTable" id="historyTable"></table>
+      </div>
+    </div>
+  </div>
+  <div class="divButtons" id="buttons">
+      <img class=button id=back src=images/back.png></img>
+      <div class=moveNum id=moveNum>12</div>
+      <img class=button id=fwd src=images/fwd.png></img>
+  </div>
+  <div class=title id=title>
+    <div id=text><h1>Pawn Pwn</h1></div>
+    <img class=about id=about src=images/about.png>
+    <img class=sign-in id=signIn src=images/sign-in.png>
+  </div>
+
+<!-- 
   <div class=hidden-div id=boardContainer><div id="divBoard" class="board"></div></div>
+
   <div class="info" id="info">
     <h1 id="title">Pawn Pwn</h1>
     <div class="tableDiv" id="tableDiv">
@@ -35,12 +65,14 @@ $(document).ready(pawnpwnUI.onReady);
     </div>
     <div class="divButtons" id="buttons">
       <img class=button id=back src=images/back.png></img>
+      <div class=moveNum id=moveNum>1</div>
       <img class=button id=fwd src=images/fwd.png></img>
     </div>
     <img class=sign-in id=signIn></img>
     <div class="divGraph" id="divGraph">
       <canvas class="historyGraph" id="historyGraph" width="200" height="200"></canvas>
     </div>
-  </div>
+  </div> -->
+
 </body>
 </html>

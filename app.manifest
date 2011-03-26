@@ -21,26 +21,39 @@ NETWORK:
 #! EXCLUDE: test-
 #! EXCLUDE: images/board.png
 #! EXCLUDE: images/board768.jpg
-# TOTAL FILES: 20 (138,826 bytes)
-# SIGNATURE: 63439faf120f47093ebaa56e537946f55168baac
+# TOTAL FILES: 33 (178,564 bytes)
+# SIGNATURE: 4d63a177f61564a63857d0a9a74a90dd32264880
 CACHE:
+README
+about.html
+about.js
 graph.js
+icon128.png
+images/about.png
 images/back.png
 images/black.png
 images/boardgolden.png
 images/fwd.png
+images/gradientcorner.png
+images/gradienth.png
+images/gradientv.png
+images/icon.png
+images/logo.png
 images/my-docs.png
 images/sign-in.png
-images/wall.png
+images/touch.png
 images/wallgolden.png
 images/white.png
 index.html
 iscroll/iscroll.js
+manifest.json
 move-controller.js
 pawnpwn.css
 pawnpwn.js
+pawnpwn.zip
 pawnpwnUI.js
 test/test-graph.js
 test/test-move-controller.js
 test/test-pawnpwn.js
 test/test-pawnpwnUI.js
+test/test-runner.html
