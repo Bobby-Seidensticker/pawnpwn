@@ -75,6 +75,46 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
 
         applicationCache.addEventListener('updateready', handleAppCache, false);
     }
+
+    
+ // find the apropriate board style based on the w and h of the window, the width of the movelist and the height of the title
+ // 1: board on left, graph on right with title above graph.  2: board on left, graph next, movelist next with title above movelist
+ // 3: title above board, extra space below board if necessary.  4: title above board, graph fills space below board
+ // 5: board top left, graph below board same width, movelist on right with title above it
+    function findBoardStyle(w, h, movelistWidth, titleHeight, minGraphSize) {
+        var boardSpace;
+        if (w > 600 && h > 800) {
+            // try boardstyle 5
+            if (h / (w - movelistWidth) > 1.382) {   // is there room on the bottom for the graph?
+                return 5;
+            }
+         // try 1 and 2, if leftover space on right is big enough, do 2, else do 1
+            if (w - h / 1.382 > movelistWidth + minGraphSize[0]) {
+                return 2;
+            }
+            return 1;
+        }
+     // is there extra space on the bottom?
+        if (h / w > 1.382) {
+         // if there is enough for a graph do 4 else do 3
+            if (h - titleHeight - w * 1.382 > 120) {
+                return 4;
+            }
+            return 3;
+        }
+     // how much left over width is there?
+        var leftoverwidth = w - h / 1.382;
+        if (leftoverwidth < minGraphSize[0]) {
+         // if there isn't enough room for a sidebar
+            return 3;
+        }
+     // if there is enough room for a movelist and graph do 2, else do 1
+        if (leftoverwidth > movelistWidth + minGraphSize[0]) {
+            return 2;
+        }
+        return 1;
+    }
+    
     
     // Handle window resize event
     function onResize() {
@@ -93,114 +133,142 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             return;
         }
         windowSize = [w, h];
-        // Landscape
-        if (w - appbarWidth > h) {
-            myScroll = new iScroll('scroller');
-            $('body').removeClass('portrait');
-            $('body').removeClass('mini-portrait');
-            $('body').addClass('landscape');
+        var boardStyle;
+        //appbar or not
+        appbarSpace = [w, 0];
+        $('body').addClass('noAppBar');
+        $('body').css('margin-top', 0);
+        if (w > 525 && h > 450) {
+            appbarSpace[1] = 35;
+            h -= 35;
+            $('body').removeClass('noAppBar');
+            $('body').css('margin-top', '35px');
+        }
+        var boardSize = [];
+        var graphSize = [];
+        var movelistSize = [];
+        
+        var wTemp, hTemp;
+        var widthConst, heightConst;
+
+        var movelistWidth = 182;
+        var minGraphSize = [200, 150];
+        var titleSize = [0, 30];
+        var boardStyle = findBoardStyle(w, h, movelistWidth, titleSize[1], minGraphSize);
+
+        $('body').removeClass('five');
+        $('body').removeClass('four');
+        $('body').removeClass('three');
+        $('body').removeClass('two');
+        $('body').removeClass('one');
+        if (boardStyle == 5) {
+            $('body').addClass('five');
+            movelistSize = [movelistWidth, h];
+            boardSize = [w - movelistWidth - 10, h];
+            graphSize[0] = boardSize[0];
+            if (h - boardSize[0] * 1.382 < minGraphSize[1]) {        // if there is less than 150 px of room for the graph, must shrink board for min graph size
+                boardSize[1] = h - minGraphSize[1];
+                graphSize = [boardSize[0], minGraphSize[1]];
+            } else {
+                boardSize[1] = boardSize[0] * 1.382;
+                graphSize[1] = h - boardSize[1];
+            }
+            graphSize[1] -= 10;
+            titleSize[0] = movelistSize[0];
+            dom.setPos(parts.board, [0, 0]);
+            dom.setPos(parts.gradientv, [boardSize[0], -35]);
+            dom.setPos(parts.gradienth, [0, boardSize[1]]);
+            dom.setPos(parts.gradientCorner, [boardSize[0], boardSize[1]]);
             
-            boardSize = [h, h];
-            // if the screen is too small, switch to mini-landscape mode
-            if (h <= 400) {
-                $('body').addClass('mini-landscape');
-                posBoard = [0, 0];
-                infoSize = [w - boardSize[0] - 10, boardSize[1] - 10];
-                dom.setPos(parts.info, [boardSize[0] + 5, 5]);
-                var scale = infoSize[0] / 210;
-                if (infoSize[0] > 220) {
-                    scale = 1;
-                } else {
-                    var scale = infoSize[0] / 220;
-                }
-                $(parts.title).css('line-height', 30 * scale + 'px');
-                $(parts.title).css('font-size', 30 * scale);
-                dom.setPos(parts.tableDiv, [0, infoSize[1] / 5]);
-                dom.setSize(parts.signIn, vector.mult(scale, signInSize));
-                dom.setPos(parts.signIn, [infoSize[0] - 79 * scale, 0]);
-                
-            } else {
-                $('body').removeClass('mini-landscape');
-                posBoard = [5, 5];
-                boardSize = vector.sub(boardSize, [10, 10]);
-                infoSize = [w - boardSize[0] - 15, boardSize[1] - appbarHeight + 5];
-                dom.setPos(parts.info, [boardSize[0] + 10, appbarHeight]);
-                parts.historyGraph.width = infoSize[0];
-                parts.historyGraph.height = infoSize[1] * .4;
-                $(parts.title).css('font-size', infoSize[1] * .075);
-                $(parts.title).css('line-height', infoSize[1] * .075 + 'px');
-                dom.setPos(parts.tableDiv, [0, 0]);
-                
-                var hspace = infoSize[0] - 70;
-                var vspace = (infoSize[1] * 0.1 - 35) / 2;
-                if (vspace < 0) {
-                    vspace = 0;
-                }
-                dom.setPos(parts.back, [(hspace / 6), vspace]);
-                dom.setPos(parts.fwd, [(hspace * 5 / 6) + 35, vspace]);
-            }
-            dom.setSize(parts.info, infoSize);
-            dom.setSize(parts.boardContainer, boardSize);
-            dom.setPos(parts.boardContainer, posBoard);
-            dom.setPos(parts.divBoard, [0, 0]);
+            dom.setPos(parts.graph, [0, boardSize[1]+ 10]);
+            dom.setPos(parts.title, [boardSize[0] + 10, 0]);
+            dom.setPos(parts.buttons, [boardSize[0] + 10, titleSize[1]]);
+            dom.setPos(parts.movelist, [boardSize[0] + 10, titleSize[1]]);
+            dom.setSize(parts.tableDiv, [movelistWidth - 10, ]);
+
+            dom.setSize(parts.gradientv, [10, 9999]);
+            dom.setSize(parts.gradienth, [boardSize[0], 10]);
         }
-        // Portrait
-        else {
-            myScroll.destroy();
-            $('body').addClass('portrait');
-            $('body').removeClass('landscape');
-            $('body').removeClass('mini-landscape');
-            $(parts.title).css('font-size', '40px');
-            $(parts.title).css('line-height', '40px');
-            titleHeight = 50;
-            dom.setPos(parts.buttons, [0, 0]);
-            dom.setPos(parts.title, [0, 3]);
-            var sw = w * 1.382;     // Ratio of full board width to squeezed width.
-            var sh;
-            //mini portrait
-            if (h < 550 || w < 450) {
-                sh = h - titleHeight;
-                $('body').addClass('mini-portrait');
-                dom.setPos(parts.info, [0, 0]);
-                infoSize = [w, 50];
-                dom.setPos(parts.back, [5, 10]);
-                dom.setPos(parts.fwd, [5 + 30 + 5, 10]);
-                dom.setPos(parts.signIn, [infoSize[0] - signInSize[0] - 5, 10]);
-                dom.setSize(parts.signIn, signInSize);
-            } else { // regular portrait
-                sh  = h - appbarHeight - titleHeight;
-                $('body').removeClass('mini-portrait');
-                dom.setPos(parts.info, [0, appbarHeight]);
-                infoSize = [w, 50];
-                var hspace = infoSize[0] - 70;
-                dom.setPos(parts.back, [(hspace / 6), 10]);
-                dom.setPos(parts.fwd, [(hspace * 5 / 6) + 35, 10]);
-            }
-            if (sw > sh) {
-                boardSize = [sh, sh];
-            } else {
-                boardSize = [sw, sw];
-            }
-            posBoard = [(w / 2) - (boardSize[0] / 2), h - boardSize[0]];
-            dom.setPos(parts.divBoard, [posBoard[0], 0]);
-            dom.setPos(parts.boardContainer, [0, posBoard[1]]);
-            dom.setSize(parts.boardContainer, [w, boardSize[1]]);
-            dom.setSize(parts.info, infoSize);
-            if (w < 370) {
-                $(parts.title).css('font-size', (w - 150) * 30 / 170);
-            }
+        if (boardStyle == 4) {
+            $('body').addClass('four');
+            boardSize = [w, w * 1.382];
+            graphSize = [w, h - boardSize[1] - titleSize[1] - 10];
+            titleSize[0] = boardSize[0];
+            dom.setPos(parts.board, [0, titleSize[1]]);
+            dom.setPos(parts.gradienth, [0, boardSize[1] + titleSize[1]]);
+            dom.setPos(parts.graph, [0, boardSize[1] + titleSize[1] + 10]);
+            dom.setPos(parts.title, [0, 0]);
         }
+        if (boardStyle == 3) {
+            $('body').addClass('three');
+            boardSize = [w, h - titleSize[1]];
+            titleSize[0] = boardSize[0];
+            dom.setPos(parts.board, [0, titleSize[1]]);
+            dom.setPos(parts.title, [0, 0]);
+        }
+        if (boardStyle == 2) {
+            $('body').addClass('two');
+            boardSize = [h / 1.382, h];
+            movelistSize = [movelistWidth, h - titleSize[1]];
+            graphSize = [w - boardSize[0] - movelistSize[0] - 10, h];
+            titleSize[0] = movelistSize[0];
+            dom.setPos(parts.board, [0, 0]);
+            dom.setPos(parts.gradientv, [boardSize[0], -40]);
+            dom.setPos(parts.graph, [boardSize[0] + 10, 0]);
+            dom.setPos(parts.title, [boardSize[0] + graphSize[0] + 10, 0]);
+            dom.setPos(parts.movelist, [boardSize[0] + graphSize[0] + 10, titleSize[1]]);
+        }
+        if (boardStyle == 1) {
+            $('body').addClass('one');
+            boardSize = [h / 1.382, h];
+            graphSize = [w - boardSize[0] - 10, h - titleSize[1]];
+            titleSize[0] = graphSize[0];
+            dom.setPos(parts.board, [0, 0]);
+            dom.setPos(parts.gradientv, [boardSize[0], -40]);
+            parts.gradientv.style.height = h + 40;
+            dom.setPos(parts.graph, [boardSize[0] + 10, titleSize[1]]);
+            dom.setPos(parts.title, [boardSize[0] + 10, 0]);
+        }
+        if (boardStyle !== 5) {
+            dom.setSize(parts.gradientv, [10, 9999]);
+            dom.setSize(parts.gradienth, [9999, 10]);
+        }
+        
+        
+        dom.setSize(parts.board, boardSize);
+        dom.setSize(parts.graph, graphSize);
+        var historyGraphSize = vector.sub(graphSize, [10, 10]);
+        parts.historyGraph.width = historyGraphSize[0];
+        parts.historyGraph.height = historyGraphSize[1];
+        
+        dom.setSize(parts.movelist, movelistSize);
+        dom.setSize(parts.tableDiv, vector.sub(movelistSize, [10, 10]));
+        
+        
+        
+        dom.setSize(parts.title, titleSize);
+        console.log("boardStyle: " + boardStyle + " " + "w, h: " + w + " " + h + "  boardSize: " + boardSize[0] + " " + boardSize[1] + "  graphSize: " + graphSize[0] + " " + 
+            graphSize[1] + "  movelistSize: " + movelistSize[0] + " " + movelistSize[1] + "  titleSize: " + titleSize[0] + " " + titleSize[1]);
+
         historyGraph = new graph.GraphLines(parts.historyGraph);
         setHistory();
-        dom.setSize(parts.divBoard, boardSize);
-        changeSize(boardSize[0]);
+        if (boardStyle !== 3 || boardSize[1] / boardSize[0] < 1.382) {
+            dom.setPos(parts.divBoard, [boardSize[0] / 2 - boardSize[1] / 2 + 5, 5]);
+            changeSize(boardSize[1] - 10);
+            return;
+        }
+        dom.setPos(parts.divBoard, [boardSize[0] / 2 - (boardSize[0] * 1.382 - 10) / 2, 5]);
+        changeSize(boardSize[0] * 1.382 - 10);
+        
+        
+        /*dom.setSize(parts.divBoard, boardSize);
         
      // somehow this line fixes an iscroll-mini-pawnpwn-board-generation bug
      // Theory: the tableDiv should be display: none.  The bug means that it is visible.  
      // So, by checking to make sure it is display: none, the program wants to cover its own back and say, 
      // "Yup we sure are display none, we were display none the entire time!  
      // It's so silly that you even ask what our display property is, we are totally display: none. LOL!"
-        $(parts.tableDiv).css('display');
+        $(parts.tableDiv).css('display');*/
     }
 
     // Move the board pieces to reflect a new board size.
@@ -208,6 +276,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
     {
         var scale = width / 575;
         var n;
+        posBoard = [parseFloat(parts.divBoard.style.left) + parseFloat(parts.board.style.left), parseFloat(parts.divBoard.style.top) + parseFloat(parts.board.style.top)];
         posTiles[1] = 90 * scale;
         posTiles[0] = 90 * scale;
         posTiles = [posTiles[0], posTiles[1]];
@@ -697,7 +766,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
 
     // currently broken with pp.history changed to {pos: n, list: [{},{},{}]} format, takes history and creates a table out of it
     function setHistory() {
-        if (pp.historyCurrent()) {
+       /* if (pp.historyCurrent()) {
             parts.fwd.disabled = true;
         } else {
             parts.fwd.disabled = false;
@@ -706,7 +775,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             parts.back.disabled = false;
         } else {
             parts.back.disabled = true;
-        }
+        }*/
 
         //set the table
         var move, past;
@@ -730,7 +799,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         }
         $(parts.historyTable).html(st);
 
-        myScroll.refresh();
+        myScroll.refresh();  // possibly don't need this
         // set the graph
         var i, j;
         var lines = [[[0, 8]], [[0, 8]]];
@@ -889,24 +958,23 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         pp.init();
         mc = new moveController.MoveController(ns, pp.history);
         init();
-        
-        historyGraph = new graph.GraphLines(parts.historyGraph);
+        //historyGraph = new graph.GraphLines(parts.historyGraph);
         //add event handlers
-        $('h1').bind('click', function() {
+        /*$('h1').bind('click', function() {
             var str = 'http://pawnpwn.pageforest.com/about.html/';
             if (location.hash) {
                 str += location.hash;
             }
             window.open(str);
-        });
+        });*/
         $("#divBoard").bind('mousemove touchmove', onMouseMove);
         $(document).bind('mouseup touchend touchcancel', onMouseUp);
         $("#divBoard").bind('mousedown touchstart', onMouseDown);
-        $("#back").bind('click', onBackButton);
+        /*$("#back").bind('click', onBackButton);
         $("#fwd").bind('click', onFwdButton);
         $(document).bind('touchmove', function (event) {
             event.preventDefault();
-        });
+        });*/
         $(window).bind('resize', function(){setTimeout(function(){ onResize(); }, 0)});
         
         
@@ -923,7 +991,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         
         
         
-        $('.sign-in').click(controlSignIn);
+        /*$('.sign-in').click(controlSignIn);*/
         onUserChange(ns.client.username);
         
         ns.client.poll();
@@ -938,8 +1006,11 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var wallcolor = "#ffffff";//golden
         //var wallcolor = "#dddddd";//current
         $('body').css('background-color', backgroundcolor);
-        $('h1').css('color', wallcolor);
-        $('#tableDiv').css('background-color', tilecolor);
+        /*$('h1').css('color', wallcolor);
+        $('#tableDiv').css('background-color', tilecolor);*/
+        
+        
+        
     }
 
     function buttonControl(dir) {
