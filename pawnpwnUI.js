@@ -151,7 +151,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var wTemp, hTemp;
         var widthConst, heightConst;
 
-        var movelistWidth = 182;
+        var movelistWidth = 188;
         var minGraphSize = [200, 150];
         var titleSize = [0, 30];
         var boardStyle = findBoardStyle(w, h, movelistWidth, titleSize[1], minGraphSize);
@@ -209,14 +209,15 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         if (boardStyle == 2) {
             $('body').addClass('two');
             boardSize = [h / 1.382, h];
-            movelistSize = [movelistWidth, h - titleSize[1]];
-            graphSize = [w - boardSize[0] - movelistSize[0] - 10, h];
+            graphSize = [w - boardSize[0] - movelistWidth - 10, h];
+            movelistSize = [movelistWidth, h - titleSize[1] - 20];
             titleSize[0] = movelistSize[0];
             dom.setPos(parts.board, [0, 0]);
             dom.setPos(parts.gradientv, [boardSize[0], -40]);
             dom.setPos(parts.graph, [boardSize[0] + 10, 0]);
             dom.setPos(parts.title, [boardSize[0] + graphSize[0] + 10, 0]);
-            dom.setPos(parts.movelist, [boardSize[0] + graphSize[0] + 10, titleSize[1]]);
+            dom.setPos(parts.movelist, [boardSize[0] + graphSize[0] + 10, titleSize[1] + 20]);
+            dom.setPos(parts.buttons, [boardSize[0] + graphSize[0] + 10, titleSize[1]])
         }
         if (boardStyle == 1) {
             $('body').addClass('one');
@@ -779,7 +780,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
 
         //set the table
         var move, past;
-        var st = '<tr><th scope="col">Move</th><th scope="col">White</th><th scope="col">Black</th></tr>';
+        var st = '<tr><th scope="maincol"></th><th scope="col">White</th><th scope="col">Black</th></tr>';
         var i;
         for (i = 0; i < pp.history.list.length; i++) {
             move = pp.history.list[i].move;

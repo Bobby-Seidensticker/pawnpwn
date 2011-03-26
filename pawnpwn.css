@@ -65,18 +65,18 @@ body.mini-landscape #title { font-size: 20px; text-align: left; line-height: 35p
 body.portrait #title { position: absolute; line-height: 40px; }
 
 
-.divButtons { position: absolute; height: 20px; width: 55px; }
+.divButtons { position: absolute; height: 20px; width: 60px; }
 .button { height: 20px; width: 20px; float: left; }
-#moveNum { float: left; height: 20px; width: 15px; text-align: center; margin: 0; line-height: 20px;
-	font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: white; font-weight: bold; }
+#moveNum { float: left; height: 20px; width: 20px; text-align: center; margin: 0; line-height: 20px;
+	font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: white; font-weight: bold; }
 
 
 body.one.noAppBar {}
 
 
 
-#text { height: 30px; width: 66px; overflow: hidden; float: left; }
-h1 { margin: 0; color: #DDD; font-size: 16px; font-weight: bold; text-align: left; line-height: 30px; }
+#text { height: 30px; width: 70px; overflow: hidden; float: left; }
+h1 { margin: 0; color: #DDD; width: 85px; font-size: 16px; font-weight: bold; text-align: left; line-height: 30px; }
 .title .about { margin: 5px; }
 .title .sign-in { margin: 5px 5px 5px 0; float: right; }
 
@@ -122,10 +122,11 @@ body.portrait #divGraph { display: none; }
 
 .historyTable { margin-left: 5px; margin-right: 5px; color: #252525; }
 .historyTable .portrait { display: none; }
-.historyTable th[scope=col] { text-align: left; font-weight: bold; }
-.historyTable th+th[scope=col] { width: 50%; text-align: center; font-weight: bold; }
+.historyTable { border-collapse: collapse; }
+.historyTable th[scope=col] { width: 75px; text-align: left; font-weight: bold; border-bottom: 1px solid black; }
+.historyTable th[scope=maincol] { width: 30px; border-bottom: 1px solid black; }
 .historyTable th[scope=row] { text-align: right; }
-.historyTable td { text-align: center; }
+.historyTable td { text-align: left; }
 .historyTable th[scope="past"] { color: #616161; text-align: right; }
 .historyTable td[scope="past"] { color: #616161; text-align: center; }
 /*
