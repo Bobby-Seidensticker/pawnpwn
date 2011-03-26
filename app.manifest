@@ -21,8 +21,8 @@ NETWORK:
 #! EXCLUDE: test-
 #! EXCLUDE: images/board.png
 #! EXCLUDE: images/board768.jpg
-# TOTAL FILES: 33 (178,677 bytes)
-# SIGNATURE: 5d60623740cb4ca86e216a4c4f25e3baeb8f5cd0
+# TOTAL FILES: 33 (178,673 bytes)
+# SIGNATURE: 441e1c7723584fc32441b2fd66317c8163ac35a8
 CACHE:
 README
 about.html
