@@ -15,9 +15,8 @@ namespace.lookup('com.pageforest.graph').defineOnce(function (ns) {
         this.maxHeight = 10;
         this.pointMultiple = 10;
         this.heightMultiple = 5;
-        this.axisMargin = 0;
 
-        this.margin = [5, 5];
+        this.margin = [0, 0];
         this.colors = ['#FFF', '#000'];
         this.axisColor = '#777';
         this.lineWidth = 3;
@@ -86,7 +85,6 @@ namespace.lookup('com.pageforest.graph').defineOnce(function (ns) {
             for (i = 0; i < lines.length; i++) {
                 var line = lines[i];
 
-                // x = this.axisMargin;
                 this.ctx.beginPath();
                 this.moveTo(line[0]);
                 for (j = 1; j < line.length; j++) {
@@ -101,10 +99,11 @@ namespace.lookup('com.pageforest.graph').defineOnce(function (ns) {
             }
 
             // Draw axes
+            var offset = 0;
             this.ctx.beginPath();
-            this.moveTo([0, this.maxHeight]);
-            this.lineTo([0, 0]);
-            this.lineTo([this.numPoints, 0]);
+            this.moveTo([offset, 0]);
+            this.lineTo([offset, this.canvas.height - offset]);
+            this.lineTo([this.canvas.width, this.canvas.height - offset]);
             this.ctx.strokeStyle = this.axisColor;
             this.ctx.stroke();
         },

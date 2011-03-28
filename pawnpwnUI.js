@@ -151,9 +151,9 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var wTemp, hTemp;
         var widthConst, heightConst;
 
-        var movelistWidth = 188;
+        var movelistWidth = 175;
         var minGraphSize = [200, 150];
-        var titleSize = [0, 30];
+        var titleSize = [0, 40];
         var boardStyle = findBoardStyle(w, h, movelistWidth, titleSize[1], minGraphSize);
 
         $('body').removeClass('five');
@@ -184,7 +184,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             dom.setPos(parts.title, [boardSize[0] + 10, 0]);
             dom.setPos(parts.buttons, [boardSize[0] + 10, titleSize[1]]);
             dom.setPos(parts.movelist, [boardSize[0] + 10, titleSize[1]]);
-            dom.setSize(parts.tableDiv, [movelistWidth - 10, ]);
+            //dom.setSize(parts.tableDiv, [movelistWidth - 10, ]);
 
             dom.setSize(parts.gradientv, [10, 9999]);
             dom.setSize(parts.gradienth, [boardSize[0], 10]);
@@ -210,14 +210,14 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             $('body').addClass('two');
             boardSize = [h / 1.382, h];
             graphSize = [w - boardSize[0] - movelistWidth - 10, h];
-            movelistSize = [movelistWidth, h - titleSize[1] - 20];
+            movelistSize = [movelistWidth, h - titleSize[1] - 40];
             titleSize[0] = movelistSize[0];
             dom.setPos(parts.board, [0, 0]);
             dom.setPos(parts.gradientv, [boardSize[0], -40]);
             dom.setPos(parts.graph, [boardSize[0] + 10, 0]);
             dom.setPos(parts.title, [boardSize[0] + graphSize[0] + 10, 0]);
-            dom.setPos(parts.movelist, [boardSize[0] + graphSize[0] + 10, titleSize[1] + 20]);
-            dom.setPos(parts.buttons, [boardSize[0] + graphSize[0] + 10, titleSize[1]])
+            dom.setPos(parts.movelist, [boardSize[0] + graphSize[0] + 10, titleSize[1]]);
+            dom.setPos(parts.buttons, [boardSize[0] + graphSize[0] + 10, boardSize[1] - 40])
         }
         if (boardStyle == 1) {
             $('body').addClass('one');
@@ -786,7 +786,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             move = pp.history.list[i].move;
             if (i < pp.history.pos) {
                 if (i % 2 === 0) {
-                    st += '<tr><th scope="row">' + (i / 2 + 1) + '.</th><td>' + move + '</td>';
+                    st += '<tr><th scope="row">' + (i / 2 + 1) + '. </th><td>' + move + '</td>';
                 } else {
                     st += '<td>' + move + '</td></tr>';
                 }
@@ -862,7 +862,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
                 if (grabbing.orient == "h") {
                     $("#" + grabbing.wallHome).css('width', wallPicWidth);
                     $("#" + grabbing.wallHome).css('height', wallPicLength);
-                    $("#" + grabbing.wallHome).attr('src', 'images/wallgolden.png');
+                    $("#" + grabbing.wallHome).attr('src', 'images/wall.png');
                 }
                 var home = wallHome[grabbing.wallHome];
                 $("#" + grabbing.wallHome).animate({left: home[0],
@@ -922,14 +922,14 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             for (x = 0; x < 10; x++) {
                 home = wallHome["w" + y + "_" + x];
                 st += "<img class='wall'id='w" + y + "_" + x +
-                    "' src='images/wallgolden.png' alt='wall' style=' top:" +
+                    "' src='images/wall.png' alt='wall' style=' top:" +
                     home[1] + "px; left:" + home[0] + "px;'></img>";
             }
         }
         var wTop = posTiles[1] + 8 * (tileWidth + wallWidth);
         var bTop = posTiles[1];
         var pawnLeft = posTiles[0] + 4 * (tileWidth + wallWidth);
-        st += "<img class='board' id='imgBoard' src='images/boardgolden.png'" +
+        st += "<img class='board' id='imgBoard' src='images/board.png'" +
             "alt='board'></img>";
         st += "<img class='pawn' id='p0' src='images/white.png'" +
             "alt='WhitePawn' style=' top:" + wTop + "px; left:" +
@@ -971,11 +971,11 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         $("#divBoard").bind('mousemove touchmove', onMouseMove);
         $(document).bind('mouseup touchend touchcancel', onMouseUp);
         $("#divBoard").bind('mousedown touchstart', onMouseDown);
-        /*$("#back").bind('click', onBackButton);
+        $("#back").bind('click', onBackButton);
         $("#fwd").bind('click', onFwdButton);
         $(document).bind('touchmove', function (event) {
             event.preventDefault();
-        });*/
+        });
         $(window).bind('resize', function(){setTimeout(function(){ onResize(); }, 0)});
         
         
@@ -1064,7 +1064,6 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         if (pos == pp.history.pos) {
             if (fnComplete == undefined) {
                 throw new Error("setMovePos called without an fnComplete function");
-                return;
             }
             fnComplete();
             flashGrabbing();
@@ -1149,10 +1148,10 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
 
     function onUserChange(username) {
         if (username == undefined) {
-            $('#signIn').attr('src', 'images/sign-in.png');
+            $('#signIn').attr('src', 'images/signin30.png');
             return;
         }
-        $('#signIn').attr('src', 'images/my-docs.png');
+        $('#signIn').attr('src', 'images/mydocs30.png');
     }
     
     function appendMoves(newHistory) {
