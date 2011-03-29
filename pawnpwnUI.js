@@ -115,7 +115,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         return 1;
     }
     
-    var boardRatio = 1.374;
+    var boardRatio = 1.382;
     // Handle window resize event
     function onResize() {
         var h, w, size;
@@ -135,11 +135,11 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         windowSize = [w, h];
         var boardStyle;
         //appbar or not
-        appbarSpace = [w, 0];
+        var appbar = 0;
         $('body').addClass('noAppBar');
         $('body').css('margin-top', 0);
         if (w > 525 && h > 450) {
-            appbarSpace[1] = 35;
+            appbar = 40;
             h -= 35;
             $('body').removeClass('noAppBar');
             $('body').css('margin-top', '35px');
@@ -151,10 +151,15 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var wTemp, hTemp;
         var widthConst, heightConst;
 
-        var movelistWidth = 185;
+        var movelistWidth = 175;
         var minGraphSize = [200, 150];
-        var titleSize = [0, 40 + appbarSpace[1]];
-        var boardStyle = findBoardStyle(w, h, movelistWidth, titleSize[1], minGraphSize);
+        var titleHeight = 40;             //contains title: Pawn Pwn, width: movelistWidth
+        var aboutHeight = 30;             //contains about and sign-in/my-docs buttons, width: movelistWidth
+        var divButtonsHeight = 30;        //contains fwd and back buttons, width: movelistWidth
+        var m = 5;                        //margin
+        var gradw = 10;                   //width of the gradient seperator bar
+        
+        var boardStyle = findBoardStyle(w, h, movelistWidth, titleHeight, minGraphSize);
 
         $('body').removeClass('five');
         $('body').removeClass('four');
@@ -164,7 +169,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         if (boardStyle == 5) {
             $('body').addClass('five');
             movelistSize = [movelistWidth, h];
-            boardSize = [w - movelistWidth - 10, h];
+            boardSize = [w - movelistWidth - m * 2, h];
             graphSize[0] = boardSize[0];
             if (h - boardSize[0] * boardRatio < minGraphSize[1]) {        // if there is less than 150 px of room for the graph, must shrink board for min graph size
                 boardSize[1] = h - minGraphSize[1];
@@ -188,53 +193,89 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
 
             dom.setSize(parts.gradientv, [10, 9999]);
             dom.setSize(parts.gradienth, [boardSize[0], 10]);
+            
+            
+            
+            var graphOffset = 3;  //necessary in order to align walls of board with axis of graph
+            if (appbar == 0) {
+                titleHeight = 5;                
+            }
+            $('body').addClass('two');
+            boardSize = [h / boardRatio, h];
+            graphSize = [w - boardSize[0] - gradw - m - movelistWidth - m, h - graphOffset];
+            movelistSize = [movelistWidth, h - titleHeight - m - aboutHeight - m - divButtonsHeight - m];
+            dom.setPos(parts.board, [0, 0]);
+            dom.setPos(parts.gradientv, [boardSize[0], -40]);
+            dom.setPos(parts.graph, [boardSize[0] + gradw + m, m + graphOffset]);
+            dom.setPos(parts.title, [boardSize[0] + gradw + m + graphSize[0], 0]);
+            dom.setPos(parts.aboutsi, [boardSize[0] + gradw + m + graphSize[0], titleHeight])
+            dom.setPos(parts.movelist, [boardSize[0] + gradw + m + graphSize[0], titleHeight + m + aboutHeight]);
+            dom.setPos(parts.buttons, [boardSize[0] + gradw + m + graphSize[0], titleHeight + m + aboutHeight + m + movelistSize[1]]);
+            
+            
+            
         }
         if (boardStyle == 4) {
             $('body').addClass('four');
-            boardSize = [w, w * boardRatio];
-            graphSize = [w, h - boardSize[1] - titleSize[1] - 10];
-            titleSize[0] = boardSize[0];
-            dom.setPos(parts.board, [0, titleSize[1]]);
-            dom.setPos(parts.gradienth, [0, boardSize[1] + titleSize[1]]);
-            dom.setPos(parts.graph, [0, boardSize[1] + titleSize[1] + 10]);
+            var th4 = aboutHeight + 2;
+            boardSize = [w - 2, (w - 2) * boardRatio];
+            graphSize = [w, h - boardSize[1] - th4 - m - divButtonsHeight - gradw];
+            dom.setPos(parts.board, [0, th4]);
             dom.setPos(parts.title, [0, 0]);
+            dom.setPos(parts.aboutsi, [boardSize[0] - movelistWidth - m, m]);
+            dom.setPos(parts.buttons, [boardSize[0] / 2 - movelistWidth / 2, boardSize[1] + th4]);
+            
+            dom.setPos(parts.gradienth, [0, boardSize[1] + th4 + divButtonsHeight + m]);
+            dom.setPos(parts.graph, [m, boardSize[1] + th4 + m + divButtonsHeight + gradw + m]);
+            
         }
         if (boardStyle == 3) {
             $('body').addClass('three');
-            boardSize = [w, h - titleSize[1]];
-            titleSize[0] = boardSize[0];
-            dom.setPos(parts.board, [0, titleSize[1]]);
+            var th3 = aboutHeight + 2;
+            boardSize = [w, h - th3 - divButtonsHeight - m];
+            dom.setPos(parts.board, [0, th3]);
             dom.setPos(parts.title, [0, 0]);
+            dom.setPos(parts.aboutsi, [boardSize[0] - movelistWidth - m, m]);
+            dom.setPos(parts.buttons, [boardSize[0] / 2 - movelistWidth / 2, boardSize[1] + th3]);
         }
         if (boardStyle == 2) {
+            //left to right, board gradbar, m, graph, m, movelist, m
+            //top to bottom, appbar, title, m, about, m, movelist, m, divbuttons, m
+            var graphOffset = 3;  //necessary in order to align walls of board with axis of graph
+            if (appbar == 0) {
+                titleHeight = 5;                
+            }
             $('body').addClass('two');
             boardSize = [h / boardRatio, h];
-            graphSize = [w - boardSize[0] - movelistWidth - 10, h];
-            movelistSize = [movelistWidth, h - titleSize[1] - 40];
-            titleSize[0] = movelistSize[0];
+            graphSize = [w - boardSize[0] - gradw - m - movelistWidth - m, h - graphOffset];
+            movelistSize = [movelistWidth, h - titleHeight - m - aboutHeight - m - divButtonsHeight - m];
             dom.setPos(parts.board, [0, 0]);
             dom.setPos(parts.gradientv, [boardSize[0], -40]);
-            dom.setPos(parts.graph, [boardSize[0] + 10, 0]);
-            dom.setPos(parts.title, [boardSize[0] + graphSize[0] + 10, 0]);
-            dom.setPos(parts.movelist, [boardSize[0] + graphSize[0] + 10, titleSize[1]]);
-            dom.setPos(parts.buttons, [boardSize[0] + graphSize[0] + 10, boardSize[1] - 40])
+            dom.setPos(parts.graph, [boardSize[0] + gradw + m, m + graphOffset]);
+            dom.setPos(parts.title, [boardSize[0] + gradw + m + graphSize[0], 0]);
+            dom.setPos(parts.aboutsi, [boardSize[0] + gradw + m + graphSize[0], titleHeight])
+            dom.setPos(parts.movelist, [boardSize[0] + gradw + m + graphSize[0], titleHeight + m + aboutHeight]);
+            dom.setPos(parts.buttons, [boardSize[0] + gradw + m + graphSize[0], titleHeight + m + aboutHeight + m + movelistSize[1]]);
         }
         if (boardStyle == 1) {
             $('body').addClass('one');
+            if (appbar == 0) {
+                titleHeight = 5;
+            }
             boardSize = [h / boardRatio, h];
-            graphSize = [w - boardSize[0] - 10, h - titleSize[1]];
-            titleSize[0] = graphSize[0];
+            graphSize = [w - boardSize[0] - gradw, h - titleHeight - m - aboutHeight - m - divButtonsHeight - m];
             dom.setPos(parts.board, [0, 0]);
             dom.setPos(parts.gradientv, [boardSize[0], -40]);
-            parts.gradientv.style.height = h + 40;
-            dom.setPos(parts.graph, [boardSize[0] + 10, titleSize[1]]);
-            dom.setPos(parts.title, [boardSize[0] + 10, 0]);
+            dom.setPos(parts.graph, [boardSize[0] + gradw + m, m + titleHeight + m + aboutHeight + m]);
+            dom.setPos(parts.title, [boardSize[0] + gradw + m + graphSize[0] / 2 - movelistWidth / 2, 0]);
+            dom.setPos(parts.aboutsi, [boardSize[0] + gradw + m + graphSize[0] - movelistWidth - m - m, titleHeight])
+            dom.setPos(parts.movelist, [boardSize[0] + gradw + m + graphSize[0], titleHeight + m + aboutHeight]);
+            dom.setPos(parts.buttons, [boardSize[0] + gradw + graphSize[0] / 2 - movelistWidth / 2, titleHeight + m + aboutHeight + m + graphSize[1]]);
         }
         if (boardStyle !== 5) {
             dom.setSize(parts.gradientv, [10, 9999]);
             dom.setSize(parts.gradienth, [9999, 10]);
         }
-        
         
         dom.setSize(parts.board, boardSize);
         dom.setSize(parts.graph, graphSize);
@@ -243,13 +284,12 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         parts.historyGraph.height = historyGraphSize[1];
         
         dom.setSize(parts.movelist, movelistSize);
-        dom.setSize(parts.tableDiv, vector.sub(movelistSize, [10, 0]));
+        dom.setSize(parts.tableDiv, movelistSize);
         
         
-        
-        dom.setSize(parts.title, titleSize);
-        console.log("boardStyle: " + boardStyle + " " + "w, h: " + w + " " + h + "  boardSize: " + boardSize[0] + " " + boardSize[1] + "  graphSize: " + graphSize[0] + " " + 
-            graphSize[1] + "  movelistSize: " + movelistSize[0] + " " + movelistSize[1] + "  titleSize: " + titleSize[0] + " " + titleSize[1]);
+        //dom.setSize(parts.title, titleSize);
+        //console.log("boardStyle: " + boardStyle + " " + "w, h: " + w + " " + h + "  boardSize: " + boardSize[0] + " " + boardSize[1] + "  graphSize: " + graphSize[0] + " " + 
+        //    graphSize[1] + "  movelistSize: " + movelistSize[0] + " " + movelistSize[1] + "  titleSize: " + titleSize[0] + " " + titleSize[1]);
 
         historyGraph = new graph.GraphLines(parts.historyGraph);
         setHistory();
@@ -258,8 +298,9 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             changeSize(boardSize[1] - 10);
             return;
         }
+        
         dom.setPos(parts.divBoard, [boardSize[0] / 2 - (boardSize[0] * boardRatio - 10) / 2, 5]);
-        changeSize(boardSize[0] * boardRatio - 10);
+        changeSize(boardSize[0] * boardRatio - 10, appbar);
         
         
         /*dom.setSize(parts.divBoard, boardSize);
@@ -273,11 +314,14 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
     }
 
     // Move the board pieces to reflect a new board size.
-    function changeSize(width)
+    function changeSize(width, appbar)
     {
         var scale = width / 575;
         var n;
         posBoard = [parseFloat(parts.divBoard.style.left) + parseFloat(parts.board.style.left), parseFloat(parts.divBoard.style.top) + parseFloat(parts.board.style.top)];
+       /* if (appbar) {
+            posBoard[1] += appbar;
+        }*/
         posTiles[1] = 90 * scale;
         posTiles[0] = 90 * scale;
         posTiles = [posTiles[0], posTiles[1]];

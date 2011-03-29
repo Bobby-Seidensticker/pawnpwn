@@ -31,7 +31,7 @@ try:
 except ImportError:
     import simplejson as json  # Please easy_install simplejson
 
-VERSION = '1.9.3'
+VERSION = '1.9.4'
 PF_DIST_SERVER = 'http://dist.pageforest.com'
 PF_DIST_DIRECTORY = '/directory.json'
 PF_FILENAME = 'pf.py'
@@ -974,7 +974,7 @@ def print_closure_messages(json, prop, file_names):
                                 message.get('error', '') + message.get('warning', ''))
 
 
-def closure_compiler(file_names, last_match=None):
+def closure_compiler(file_names, last_match=None, minify=True):
     """
     Use Google Closure compiler on given file names.  If last_match
     matches the hash of the previous combined files, then we don't
@@ -1003,17 +1003,21 @@ def closure_compiler(file_names, last_match=None):
     if not options.force and last_match and last_match == signature:
         return (None, None)
 
-    data = urllib.urlencode(params)
-    output = urllib2.urlopen(CLOSURE_API, data).read()
-    output = json.loads(output)
+    if minify:
+        data = urllib.urlencode(params)
+        output = urllib2.urlopen(CLOSURE_API, data).read()
+        output = json.loads(output)
 
-    print_closure_messages(output, 'errors', file_names)
-    print_closure_messages(output, 'warnings', file_names)
+        print_closure_messages(output, 'errors', file_names)
+        print_closure_messages(output, 'warnings', file_names)
 
-    if 'errors' in output:
-        combined += "\n/* Minified Version has errors! */"
+        if 'errors' in output:
+            combined += "\n/* Minified Version has errors! */"
+        minified = output['compiledCode']
+    else:
+        minified = ""
 
-    return (combined, output['compiledCode'])
+    return (combined, minified)
 
 
 def do_make(explicit=False):
@@ -1037,21 +1041,26 @@ def do_make(explicit=False):
         print "Invalid %s file (%s)." % (MAKE_FILENAME, str(e))
         exit(1)
 
+    minify = make_info.get('minify', True)
+
     for combination, files in make_info['files'].items():
         file_name = get_local_path(combination)
         combined_info = options.local_listing.get(file_name, {"sha1": "no-local-file"})
-        (combined, minified) = closure_compiler(files, combined_info['sha1'])
+        (combined, minified) = closure_compiler(files, combined_info['sha1'], minify)
         if combined is None:
             continue
         print "Making combined file: %s" % file_name
         file = open(file_name, 'wb')
         file.write(combined)
         file.close()
-        file_name = file_name.replace('.js', '.min.js')
-        print "Making compiled file: %s" % file_name
-        file = open(file_name, 'wb')
-        file.write(minified)
-        file.close()
+        update_local_listing(file_name)
+        if minify:
+            file_name = file_name.replace('.js', '.min.js')
+            print "Making compiled file: %s" % file_name
+            file = open(file_name, 'wb')
+            file.write(minified)
+            file.close()
+            update_local_listing(file_name)
 
 
 def compile_command(args):
@@ -1091,6 +1100,7 @@ def config_command(args):
         make_file = open(MAKE_FILENAME, 'w')
         contents = to_json({
                     "uploadIndividualFiles": False,
+                    "minify": True,
                     "files": {"combined.js": file_names}
                     })
         make_file.write(contents)

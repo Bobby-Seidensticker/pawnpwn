@@ -99,7 +99,7 @@ namespace.lookup('com.pageforest.graph').defineOnce(function (ns) {
             }
 
             // Draw axes
-            var offset = 3;
+            var offset = 2;
             this.ctx.fillStyle = this.axisColor;
             this.ctx.fillRect(0, 0, offset, this.canvas.height);
             this.ctx.fillRect(0, this.canvas.height - offset, this.canvas.width, offset);
