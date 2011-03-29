@@ -85,25 +85,25 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var boardSpace;
         if (w > 600 && h > 800) {
             // try boardstyle 5
-            if (h / (w - movelistWidth) > 1.382) {   // is there room on the bottom for the graph?
+            if (h / (w - movelistWidth) > boardRatio) {   // is there room on the bottom for the graph?
                 return 5;
             }
          // try 1 and 2, if leftover space on right is big enough, do 2, else do 1
-            if (w - h / 1.382 > movelistWidth + minGraphSize[0]) {
+            if (w - h / boardRatio > movelistWidth + minGraphSize[0]) {
                 return 2;
             }
             return 1;
         }
      // is there extra space on the bottom?
-        if (h / w > 1.382) {
+        if (h / w > boardRatio) {
          // if there is enough for a graph do 4 else do 3
-            if (h - titleHeight - w * 1.382 > 120) {
+            if (h - titleHeight - w * boardRatio > 120) {
                 return 4;
             }
             return 3;
         }
      // how much left over width is there?
-        var leftoverwidth = w - h / 1.382;
+        var leftoverwidth = w - h / boardRatio;
         if (leftoverwidth < minGraphSize[0]) {
          // if there isn't enough room for a sidebar
             return 3;
@@ -115,7 +115,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         return 1;
     }
     
-    
+    var boardRatio = 1.374;
     // Handle window resize event
     function onResize() {
         var h, w, size;
@@ -151,9 +151,9 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var wTemp, hTemp;
         var widthConst, heightConst;
 
-        var movelistWidth = 175;
+        var movelistWidth = 185;
         var minGraphSize = [200, 150];
-        var titleSize = [0, 40];
+        var titleSize = [0, 40 + appbarSpace[1]];
         var boardStyle = findBoardStyle(w, h, movelistWidth, titleSize[1], minGraphSize);
 
         $('body').removeClass('five');
@@ -166,11 +166,11 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             movelistSize = [movelistWidth, h];
             boardSize = [w - movelistWidth - 10, h];
             graphSize[0] = boardSize[0];
-            if (h - boardSize[0] * 1.382 < minGraphSize[1]) {        // if there is less than 150 px of room for the graph, must shrink board for min graph size
+            if (h - boardSize[0] * boardRatio < minGraphSize[1]) {        // if there is less than 150 px of room for the graph, must shrink board for min graph size
                 boardSize[1] = h - minGraphSize[1];
                 graphSize = [boardSize[0], minGraphSize[1]];
             } else {
-                boardSize[1] = boardSize[0] * 1.382;
+                boardSize[1] = boardSize[0] * boardRatio;
                 graphSize[1] = h - boardSize[1];
             }
             graphSize[1] -= 10;
@@ -191,7 +191,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         }
         if (boardStyle == 4) {
             $('body').addClass('four');
-            boardSize = [w, w * 1.382];
+            boardSize = [w, w * boardRatio];
             graphSize = [w, h - boardSize[1] - titleSize[1] - 10];
             titleSize[0] = boardSize[0];
             dom.setPos(parts.board, [0, titleSize[1]]);
@@ -208,7 +208,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         }
         if (boardStyle == 2) {
             $('body').addClass('two');
-            boardSize = [h / 1.382, h];
+            boardSize = [h / boardRatio, h];
             graphSize = [w - boardSize[0] - movelistWidth - 10, h];
             movelistSize = [movelistWidth, h - titleSize[1] - 40];
             titleSize[0] = movelistSize[0];
@@ -221,7 +221,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         }
         if (boardStyle == 1) {
             $('body').addClass('one');
-            boardSize = [h / 1.382, h];
+            boardSize = [h / boardRatio, h];
             graphSize = [w - boardSize[0] - 10, h - titleSize[1]];
             titleSize[0] = graphSize[0];
             dom.setPos(parts.board, [0, 0]);
@@ -243,7 +243,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         parts.historyGraph.height = historyGraphSize[1];
         
         dom.setSize(parts.movelist, movelistSize);
-        dom.setSize(parts.tableDiv, vector.sub(movelistSize, [10, 10]));
+        dom.setSize(parts.tableDiv, vector.sub(movelistSize, [10, 0]));
         
         
         
@@ -253,13 +253,13 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
 
         historyGraph = new graph.GraphLines(parts.historyGraph);
         setHistory();
-        if (boardStyle !== 3 || boardSize[1] / boardSize[0] < 1.382) {
+        if (boardStyle !== 3 || boardSize[1] / boardSize[0] < boardRatio) {
             dom.setPos(parts.divBoard, [boardSize[0] / 2 - boardSize[1] / 2 + 5, 5]);
             changeSize(boardSize[1] - 10);
             return;
         }
-        dom.setPos(parts.divBoard, [boardSize[0] / 2 - (boardSize[0] * 1.382 - 10) / 2, 5]);
-        changeSize(boardSize[0] * 1.382 - 10);
+        dom.setPos(parts.divBoard, [boardSize[0] / 2 - (boardSize[0] * boardRatio - 10) / 2, 5]);
+        changeSize(boardSize[0] * boardRatio - 10);
         
         
         /*dom.setSize(parts.divBoard, boardSize);

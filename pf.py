@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-pf - Pageforest Application Uploader
+pf.py - Pageforest Application Uploader
 
 See http://pageforest.com for more information about the
 Pageforest web application platform.
@@ -8,7 +8,7 @@ Pageforest web application platform.
 This utliity will deploy files to your pageforest application
 so you can edit your application files on your local machine.
 
-See pf --help for more information.
+See pf.py --help for more information.
 """
 
 import re
@@ -31,7 +31,7 @@ try:
 except ImportError:
     import simplejson as json  # Please easy_install simplejson
 
-VERSION = '1.9.1'
+VERSION = '1.9.3'
 PF_DIST_SERVER = 'http://dist.pageforest.com'
 PF_DIST_DIRECTORY = '/directory.json'
 PF_FILENAME = 'pf.py'
@@ -218,9 +218,10 @@ def check_pf():
             (local_version, PF_FILENAME, remote_version)
             return
         if  local_version < remote_version:
+            print "New version of %s (%s) available - Changes: %s" % \
+                (PF_FILENAME, remote_version, file_info['versions'][str(remote_version)]['summary'])
             if str(local_version) in file_info['obsolete'] or \
-                if_yes("New version (%s) of %s available (you have %s).  Download now?" %
-                       (local_version, PF_FILENAME, VERSION)):
+                if_yes("Download %s now?" % PF_FILENAME):
                 pf = get_dist_file(PF_FILENAME, file_info, True)
     except Exception, e:
         print "Version check for %s failed: %s" % (PF_FILENAME, str(e))
@@ -973,7 +974,12 @@ def print_closure_messages(json, prop, file_names):
                                 message.get('error', '') + message.get('warning', ''))
 
 
-def closure_compiler(file_names):
+def closure_compiler(file_names, last_match=None):
+    """
+    Use Google Closure compiler on given file names.  If last_match
+    matches the hash of the previous combined files, then we don't
+    recompile them.
+    """
     params = [
         ('compilation_level', 'SIMPLE_OPTIMIZATIONS'),
         ('output_info', 'compiled_code'),
@@ -992,12 +998,20 @@ def closure_compiler(file_names):
         combined += data
         params.append(('js_code', data))
 
+    # Short circuit if we've already compiled these files
+    signature = hashlib.sha1(combined).hexdigest()
+    if not options.force and last_match and last_match == signature:
+        return (None, None)
+
     data = urllib.urlencode(params)
     output = urllib2.urlopen(CLOSURE_API, data).read()
     output = json.loads(output)
 
     print_closure_messages(output, 'errors', file_names)
     print_closure_messages(output, 'warnings', file_names)
+
+    if 'errors' in output:
+        combined += "\n/* Minified Version has errors! */"
 
     return (combined, output['compiledCode'])
 
@@ -1024,15 +1038,18 @@ def do_make(explicit=False):
         exit(1)
 
     for combination, files in make_info['files'].items():
-        (combined, minified) = closure_compiler(files)
         file_name = get_local_path(combination)
+        combined_info = options.local_listing.get(file_name, {"sha1": "no-local-file"})
+        (combined, minified) = closure_compiler(files, combined_info['sha1'])
+        if combined is None:
+            continue
         print "Making combined file: %s" % file_name
-        file = open(file_name, 'w')
+        file = open(file_name, 'wb')
         file.write(combined)
         file.close()
         file_name = file_name.replace('.js', '.min.js')
         print "Making compiled file: %s" % file_name
-        file = open(file_name, 'w')
+        file = open(file_name, 'wb')
         file.write(minified)
         file.close()
 
@@ -1117,7 +1134,7 @@ def info_command(args):
     print "Application: %s" % getattr(options, 'application')
     print "Server: %s" % getattr(options, 'server')
     print "Username:  %s" % getattr(options, 'username')
-    print "pf version: %s" % VERSION
+    print "%s version: %s" % (PF_FILENAME, VERSION)
     check_pf()
 
 

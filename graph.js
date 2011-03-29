@@ -18,7 +18,7 @@ namespace.lookup('com.pageforest.graph').defineOnce(function (ns) {
 
         this.margin = [0, 0];
         this.colors = ['#FFF', '#000'];
-        this.axisColor = '#777';
+        this.axisColor = '#9e9e9e';
         this.lineWidth = 3;
         this.lineJoin = 'round';
         this.lineCap = 'round';
@@ -99,13 +99,10 @@ namespace.lookup('com.pageforest.graph').defineOnce(function (ns) {
             }
 
             // Draw axes
-            var offset = 0;
-            this.ctx.beginPath();
-            this.moveTo([offset, 0]);
-            this.lineTo([offset, this.canvas.height - offset]);
-            this.lineTo([this.canvas.width, this.canvas.height - offset]);
-            this.ctx.strokeStyle = this.axisColor;
-            this.ctx.stroke();
+            var offset = 3;
+            this.ctx.fillStyle = this.axisColor;
+            this.ctx.fillRect(0, 0, offset, this.canvas.height);
+            this.ctx.fillRect(0, this.canvas.height - offset, this.canvas.width, offset);
         },
 
         roundMult: function (x, factor) {
