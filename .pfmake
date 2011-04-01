@@ -1,0 +1,13 @@
+{
+  "files": {
+    "combined.js": [
+      "about.js",
+      "graph.js",
+      "iscroll/iscroll.js",
+      "move-controller.js",
+      "pawnpwn.js",
+      "pawnpwnUI.js"
+    ]
+  },
+  "uploadIndividualFiles": false
+}
