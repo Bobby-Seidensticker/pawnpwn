@@ -35,8 +35,8 @@ body.five .gradientCorner { display: block; }
 
 div.board { position: absolute; overflow: hidden; }
 div.board div { position: absolute; z-index: 1; }
-
-
+div.yourmove { position: relative; z-index: 2; width: 72.3%; height: 14%; background-color: white; opacity: 0; }
+div.board div.yourmovep { position: relative; z-index: 4; width: 100%; height: 100%; background-color: white; opacity: 0; }
 
 
 div.graph { position: absolute; }
@@ -53,16 +53,9 @@ div.tableDiv
 
 div.title { position: absolute; }
 
+.divPawn { position: absolute; width: 6.1%; height: 6.1% }
 .wall, .pawn { position: absolute; z-index: 3; }
 .grabbing { z-index: 4; }
-
-
-
-
-#title { width: 100%; height: 100%; }
-body.landscape #title { font-size: 12px; height: 10%; }
-body.mini-landscape #title { font-size: 20px; text-align: left; line-height: 35px; }
-body.portrait #title { position: absolute; line-height: 40px; }
 
 
 .divButtons { position: absolute; height: 30px; width: 175px; }
