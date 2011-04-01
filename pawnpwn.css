@@ -19,8 +19,6 @@ body.three .movelist { display: none; }
 body.three .graph { display: none; }
 body.one .movelist { display: none; }
 
-
-
 div.gradientv { position: absolute; z-index: 5; background-image: url('images/gradientv.png'); width: 10px; }
 div.gradienth { position: absolute; z-index: 5; background-image: url('images/gradienth.png'); height: 10px; }
 body.one .gradienth { display: none; }
@@ -80,44 +78,6 @@ body.noAppBar .sign-in { float: right; display: block; }
 
 
 
-
-
-
-/*
-
-
-#pfAppPanel{ z-index: 9; }
-
-
-div.board img.board { position: absolute; z-index: 1; }
-
-body.landscape:not(.mini-landscape) .gradient { display: block; }
-body.landscape.mini-landscape .gradient { display: none; }
-body.portrait .gradient { display: none; }
-
-
-div.info { position: absolute; overflow: hidden; }
-
-h1:hover { cursor: pointer; }
-
-body.mini-landscape #pfAppBar { display: none; }
-body.mini-portrait #pfAppBar { display: none; }
-
-
-
-
-body.landscape:not(.mini-landscape) #tableDiv { height: 40% }
-body.landscape.mini-landscape #tableDiv { position: absolute; height: 80%; }
-body.portrait #tableDiv { display: none; }
-body.portrait #scroller { display: none; }
-
-
-body.landscape #divGraph { width: 100%; height: 40%; }
-body.mini-landscape #divGraph { display: none; }
-body.portrait #divGraph { display: none; }
-*/
-
-
 .historyTable { color: #252525; font-size: 18px; font-family: Arial, Helvetica, sans-serif; }
 .historyTable .portrait { display: none; }
 .historyTable { border-collapse: collapse; }
@@ -127,12 +87,3 @@ body.portrait #divGraph { display: none; }
 .historyTable td { text-align: left; font-weight: bold; }
 .historyTable th[scope="past"] { color: #616161; text-align: right; }
 .historyTable td[scope="past"] { color: #616161; text-align: left; }
-/*
-div.hidden-div { position: absolute; overflow: hidden; }
-
-#signIn { position: absolute; width: 79px; height: 30px; }
-body.landscape.mini-landscape #signIn { display: visible; }
-body.landscape:not(.mini-landscape) #signIn { display: none; }
-body.portrait.mini-portrait #signIn { display: visible; margin: 2px, 0; }
-body.portrait:not(.mini-portrait) #signIn { display: none; }
-*/
