@@ -17,7 +17,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
     var vCode = 118;
     var hCode = 104;
     var windowSize = [0, 0];    // actual window size used for detecting useless onResize events
-    
+
     var grabbing = {
         valid: false,        // true when holding a piece
         wall: false,         // false when no valid wall move around, move string when there is
@@ -59,9 +59,9 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
     var wallSpeed;        //current speed of piece
     var wallSpeedLimit = 5;
 
-    
+
     var timesBoardSizeModified = 0;
-    
+
     function handleAppCache() {
         if (typeof applicationCache == 'undefined') {
             return;
@@ -76,7 +76,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         applicationCache.addEventListener('updateready', handleAppCache, false);
     }
 
-    
+
  // find the apropriate board style based on the w and h of the window, the width of the movelist and the height of the title
  // 1: board on left, graph on right with title above graph.  2: board on left, graph next, movelist next with title above movelist
  // 3: title above board, extra space below board if necessary.  4: title above board, graph fills space below board
@@ -114,7 +114,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         }
         return 1;
     }
-    
+
     var boardRatio = 1.370; // actually 1.382 but this number gives better horizontal margins
     // Handle window resize event
     function onResize() {
@@ -148,7 +148,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var boardSpace = [];           //size of space board resides in.  Might be != to boardSize in style 3 and 5
         var graphSize = [];
         var movelistSize = [];
-        
+
         var wTemp, hTemp;
         var widthConst, heightConst;
 
@@ -159,11 +159,11 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var divButtonsHeight = 30;        //contains fwd and back buttons, width: movelistWidth
         var m = 5;                        //margin
         var gradw = 10;                   //width of the gradient seperator bar
-        
+
         var boardStyle = findBoardStyle(w, h, movelistWidth, titleHeight, minGraphSize);
 
-        
-        
+
+
         $('body').css('height', h);
         $('body').removeClass('five');
         $('body').removeClass('four');
@@ -203,10 +203,10 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             dom.setPos(parts.title, [0, 0]);
             dom.setPos(parts.aboutsi, [boardSize[0] - movelistWidth - m, m]);
             dom.setPos(parts.buttons, [boardSize[0] / 2 - movelistWidth / 2, boardSize[1] + th4]);
-            
+
             dom.setPos(parts.gradienth, [0, boardSize[1] + th4 + divButtonsHeight + m]);
             dom.setPos(parts.graph, [m, boardSize[1] + th4 + m + divButtonsHeight + gradw + m]);
-            
+
         }
         if (boardStyle == 3) {
             $('body').addClass('three');
@@ -222,7 +222,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             //top to bottom, appbar, title, m, about, m, movelist, m, divbuttons, m
             var graphOffset = 3;  //necessary in order to align walls of board with axis of graph
             if (appbar == 0) {
-                titleHeight = 5;                
+                titleHeight = 5;
             }
             $('body').addClass('two');
             boardSize = [h / boardRatio, h];
@@ -257,13 +257,13 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         } else {
             dom.setSize(parts.gradienth, [w, 10]);
         }
-        
+
         dom.setSize(parts.board, boardSize);
         dom.setSize(parts.graph, graphSize);
         var historyGraphSize = vector.sub(graphSize, [10, 10]);
         parts.historyGraph.width = historyGraphSize[0];
         parts.historyGraph.height = historyGraphSize[1];
-        
+
         dom.setSize(parts.movelist, movelistSize);
         dom.setSize(parts.tableDiv, movelistSize);
 
@@ -274,17 +274,17 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             changeSize(boardSize[1] - 10, appbar);
             return;
         }
-        
+
         dom.setPos(parts.divBoard, [boardSize[0] / 2 - (boardSize[0] * boardRatio - 10) / 2, 5]);
         changeSize(boardSize[0] * boardRatio - 10, appbar);
-        
-        
+
+
         /*dom.setSize(parts.divBoard, boardSize);
-        
+
      // somehow this line fixes an iscroll-mini-pawnpwn-board-generation bug
-     // Theory: the tableDiv should be display: none.  The bug means that it is visible.  
-     // So, by checking to make sure it is display: none, the program wants to cover its own back and say, 
-     // "Yup we sure are display none, we were display none the entire time!  
+     // Theory: the tableDiv should be display: none.  The bug means that it is visible.
+     // So, by checking to make sure it is display: none, the program wants to cover its own back and say,
+     // "Yup we sure are display none, we were display none the entire time!
      // It's so silly that you even ask what our display property is, we are totally display: none. LOL!"
         $(parts.tableDiv).css('display');*/
     }
@@ -334,7 +334,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         onMouseUp();
         var i, used = false;
         var pawnLoc;
-        for (x = 0; x < 2; x++) {    
+        for (x = 0; x < 2; x++) {
             for (y = 0; y < 10; y++) {
                 wall = 'w' + x + '_' + y;
                 for (i = 0; i < pp.history.pos; i++) {
@@ -448,7 +448,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var hRect = [pos[0] - wallDragH[0], pos[1] - wallDragH[1],
                      pos[0] + wallLength - wallDragH[0], pos[1] + wallDragH[1]];
         vector.addTo(hRect, hMod);
-        
+
         var score = [];
         for (x = 0; x < walls.length; x++) {
             wall = wallRect(walls[x]);
@@ -621,7 +621,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         // Maximum endpoint along track
         track = vector.mult(track, dist);
         var magTrack2 = vector.magnitude2(track);
-        
+
         // Projection of mouse along track line
         // track . mouse = |track| |mouse| cos(theta)
         // scalar = |mouse| cos(theta) / |track|
@@ -647,7 +647,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         var dist = Math.sqrt(vector.magnitude2(vect));
         if (grabbing.pColor === false) {
             wallSpeed = dist / boardWidth * 100;
-            /*$(parts.title).html(Math.floor(wallSpeed));    //speedometer for calibrating wallSpeed limit for cancel 
+            /*$(parts.title).html(Math.floor(wallSpeed));    //speedometer for calibrating wallSpeed limit for cancel
             if (wallSpeed > wallSpeedLimit) {
                 $(parts.title).css('color', 'red');
             } else {
@@ -686,7 +686,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         grabbing = { valid: false, wall: false, wallHome: false, orient: "v",
             pMove: false, pColor: false, pos: [0, 0], offset: [] };
     }
-    
+
     function onMouseMove(event) {
         event.preventDefault();
 
@@ -964,7 +964,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             $(parts['yourmovep' + turn]).animate({opacity: 0.4}, 300);
         }
     }
-    
+
     function onReady()
     {
         if (!addEventListener) {
@@ -985,7 +985,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         init();
         //add event handlers
         $(parts.about).bind('click', function() {
-            var str = '/about.html/';
+            var str = '/about.html';
             if (location.hash) {
                 str += location.hash;
             }
@@ -1000,28 +1000,28 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             event.preventDefault();
         });
         $(window).bind('resize', function(){setTimeout(function(){ onResize(); }, 0)});
-        
+
         var yourmovetimer = setInterval(fadein, 10000);
-        
+
         /*$(window).bind('orientationchange', function (event) {
             event.preventDefault();
         });*/
-        
+
         setInterval(onDrag, refreshTime); // constantly running, controls piece dragging
-        
+
         ns.client = new clientLib.Client(ns);
         ns.client.addAppBar();
         $('#pfAppBarBox').css('z-index', '1002');
         $('#pfAppPanel').css('z-index', '1001');
-        
+
         $('.sign-in').click(controlSignIn);
         onUserChange(ns.client.username);
-        
+
         ns.client.poll();
         onResize();
         ns.client.saveInterval = 0;
         ns.client.autoLoad = true;
-        
+
         var backgroundcolor = "#616161";//golden
         var tilecolor = "#9e9e9e";//golden
         var wallcolor = "#ffffff";//golden
@@ -1060,7 +1060,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
             }
         });
     }
-    
+
     function onBackButton() {
         console.log('back button clicked');
         buttonControl('back');
@@ -1172,7 +1172,7 @@ namespace.lookup('com.pageforest.pawnpwnUI').defineOnce(function (ns) {
         }
         $('#signIn').attr('src', 'images/mydocs30.png');
     }
-    
+
     function appendMoves(newHistory) {
         pp.history.list = newHistory.list;
     }

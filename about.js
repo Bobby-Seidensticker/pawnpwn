@@ -1,32 +1,34 @@
+namespace.lookup('com.pageforest.pawnpwn.about').define(function (ns) {
+    ns.onReady = onReady;
 
-namespace.lookup('com.pageforest.aboutpawnpwn').defineOnce(function (ns) {
-    
-    function onResize() {
-        if (window.innerWidth > 700) {
-            $('body').addClass('wide');
-        } else {
-            $('body').removeClass('wide');
-        }
-    }
-    
+    var server = "http://pawnpwn.pageforest.com/";
+
     function onReady() {
-        var game, str;
-        if (location.hash) {
-            str = '<p>To start playing, send them an <a href="mailto:?subject=Let\'s%20Play%20Pawn%20Pwn&body=http://pawnpwn.pageforest.com/%23' + game + 
-                '">email</a>.  Or get them this link another way:</p>';
-            $('#linkh').attr('href', location.origin + '/' + location.hash);
-            $('#linkh').html(location.origin + '/' + location.hash);
-        } else {
-            str = '<p>After you log in and create a game, this sentence will be' +
-                ' a handy mailto link as well as the address itself, in case you\'re in fullscreen mode.  This is what the link to your game will look like: </p>';
-            $('#linkh').attr('href', location.origin + '#yourusername-1234/');
+        handleAppCache();
+        if (!location.hash) {
+            return;
         }
-        $('#linkp').html(str);
-        $(window).bind('resize', function(){setTimeout(function(){ onResize(); }, 0)});
-        onResize();
+        $(document.body).addClass('saved');
+        var href = "mailto:?subject=" + encodeURIComponent("Let's Play Pawn Pwn") +
+            "&body=" + server + encodeURIComponent(location.hash);
+        $('#mail-link').attr('href', href);
+        var url = server + location.hash;
+        $('#url-link').attr('href', url);
+        $('#url-link').text(url);
     }
-    
-    ns.extend({
-        'onReady': onReady
-    });
+
+    function handleAppCache() {
+        if (typeof applicationCache == 'undefined') {
+            return;
+        }
+
+        if (applicationCache.status == applicationCache.UPDATEREADY) {
+            applicationCache.swapCache();
+            location.reload();
+            return;
+        }
+
+        applicationCache.addEventListener('updateready', handleAppCache, false);
+    }
+
 });

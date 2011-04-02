@@ -24,10 +24,11 @@ NETWORK:
 #! EXCLUDE: about.js
 #! EXCLUDE: graph.js
 #! EXCLUDE: icon128.png
-# TOTAL FILES: 20 (74,267 bytes)
-# SIGNATURE: b6f01c48223938bff383d56d329695a9735f0a68
+# TOTAL FILES: 22 (76,434 bytes)
+# SIGNATURE: 3c04ca304d2bbcd075d574c66460777b052dcce1
 CACHE:
 README
+about.css
 about.html
 combined.min.js
 images/about30wide.png
@@ -35,6 +36,7 @@ images/back.png
 images/black.png
 images/board.png
 images/fwd.png
+images/gradient.jpg
 images/gradientcorner.png
 images/gradienth.png
 images/gradientv.png
