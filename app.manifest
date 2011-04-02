@@ -23,12 +23,16 @@ NETWORK:
 #! EXCLUDE: iscroll
 #! EXCLUDE: move-controller.js
 #! EXCLUDE: combined.js
-# TOTAL FILES: 23 (85,896 bytes)
-# SIGNATURE: b05da5b74449bcbed07439e0cb3e215d87aa22f6
+#! EXCLUDE: about.js
+#! EXCLUDE: graph.js
+#! EXCLUDE: icon128.png
+# TOTAL FILES: 36 (313,824 bytes)
+# SIGNATURE: f9ecbb9a7ea787d1874cca41768cef1cac461d75
 CACHE:
 README
 about.html
 about.js
+combined.js
 combined.min.js
 graph.js
 icon128.png
@@ -48,4 +52,16 @@ images/touch.png
 images/wall.png
 images/white.png
 index.html
+iscroll/iscroll.js
 manifest.json
+move-controller.js
+pawnpwn.css
+pawnpwn.js
+pawnpwn.zip
+pawnpwnUI.js
+test-runner.html
+test/test-graph.js
+test/test-move-controller.js
+test/test-pawnpwn.js
+test/test-pawnpwnUI.js
+test/test-runner.html
