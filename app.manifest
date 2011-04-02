@@ -1,10 +1,8 @@
 CACHE MANIFEST
 # Cache files for offline access - see http://diveintohtml5.org/offline.html
 
-http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js
 /lib/beta/css/client.css
-/lib/beta/js/json2.min.js
-/lib/beta/js/utils.min.js
+/lib/beta/js/pf-client.min.js
 /static/images/appbar/green-left.png
 /static/images/appbar/green-center.png
 /static/images/appbar/green-right.png
@@ -26,16 +24,12 @@ NETWORK:
 #! EXCLUDE: about.js
 #! EXCLUDE: graph.js
 #! EXCLUDE: icon128.png
-# TOTAL FILES: 36 (313,824 bytes)
-# SIGNATURE: f9ecbb9a7ea787d1874cca41768cef1cac461d75
+# TOTAL FILES: 20 (74,267 bytes)
+# SIGNATURE: b6f01c48223938bff383d56d329695a9735f0a68
 CACHE:
 README
 about.html
-about.js
-combined.js
 combined.min.js
-graph.js
-icon128.png
 images/about30wide.png
 images/back.png
 images/black.png
@@ -52,16 +46,4 @@ images/touch.png
 images/wall.png
 images/white.png
 index.html
-iscroll/iscroll.js
 manifest.json
-move-controller.js
-pawnpwn.css
-pawnpwn.js
-pawnpwn.zip
-pawnpwnUI.js
-test-runner.html
-test/test-graph.js
-test/test-move-controller.js
-test/test-pawnpwn.js
-test/test-pawnpwnUI.js
-test/test-runner.html
